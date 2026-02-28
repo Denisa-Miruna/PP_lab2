@@ -18,7 +18,17 @@ class Polyglot {
         Context polyglot = Context.newBuilder().allowAllAccess(true).build();
         //folosim o variabila generica care va captura rezultatul excutiei functiei PYTHON, sum()
         //avem voie sa inlocuim anumite elemente din scriptul pe care il construim spre evaluare, aici token provine din JAVA, dar va fi interpretat de PYTHON
-        Value result = polyglot.eval("python", "sum(ord(ch) for ch in '" + token + "')");
+
+        String pythonScript="""
+        def polinom(text):
+            rez=sum(2*ord(ch)**3 -5*ord(ch)**2+3*ord(ch)+10 for ch in text) #2*ch^3+..
+            return rez
+        polinom('""" +token+ """
+        ')
+        """;
+
+        Value result = polyglot.eval("python", pythonScript);
+
         //utilizam metoda asInt() din variabila incarcata cu output-ul executiei, pentru a mapa valoarea generica la un Int
         int resultInt = result.asInt();
         // inchidem contextul Polyglot
