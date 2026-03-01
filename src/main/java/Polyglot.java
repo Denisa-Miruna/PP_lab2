@@ -46,14 +46,44 @@ class Polyglot {
         //construim un array de string-uri, folosind cuvinte din pagina web:  https://chrisseaton.com/truffleruby/tenthings/
         Value array = polyglot.eval("js", "[\"If\",\"we\",\"run\",\"the\",\"java\"];");
         //pentru fiecare cuvant, convertim la upcase folosind R si calculam suma de control folosind PYTHON
+        int []crcVector=new int[(int)array.getArraySize()];
+        String []cuvinte=new String[crcVector.length];
         for (int i = 0; i < array.getArraySize();i++){
             String element = array.getArrayElement(i).asString();
             String upper = PythonToUpper(element);
             int crc = SumCRC(upper);
-
-
+            crcVector[i]=crc;
+            cuvinte[i]=upper;
             System.out.println(upper + " -> " + crc);
         }
+        for(int i=0;i<crcVector.length-1;i++)
+        {
+            for(int j=i+1;j<crcVector.length;j++)
+            {
+                if(crcVector[i]>crcVector[j])
+                {
+                    int temp = crcVector[i];
+                    crcVector[i] = crcVector[j];
+                    crcVector[j] = temp;
+                    String aux=new String(cuvinte[i]);
+                    cuvinte[i]=cuvinte[j];
+                    cuvinte[j]=aux;
+                }
+            }
+        }
+        System.out.println("printare elem cu aceeasi suma");
+        int i=0;
+        while(i<cuvinte.length)
+        {   if(crcVector[i]==crcVector[i+1])
+            {
+                System.out.println(cuvinte[i]+"->"+crcVector[i]);
+            } else if (crcVector[i-1]==crcVector[i])
+                    {
+                        System.out.println(cuvinte[i]+"->"+crcVector[i]);
+                    }
+            i++;
+        }
+
         // inchidem contextul Polyglot
         polyglot.close();
     }
