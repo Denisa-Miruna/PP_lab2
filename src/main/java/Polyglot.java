@@ -18,10 +18,11 @@ class Polyglot {
         Context polyglot = Context.newBuilder().allowAllAccess(true).build();
         //folosim o variabila generica care va captura rezultatul excutiei functiei PYTHON, sum()
         //avem voie sa inlocuim anumite elemente din scriptul pe care il construim spre evaluare, aici token provine din JAVA, dar va fi interpretat de PYTHON
-
+        token=token.substring(1,token.length()-1);
+        System.out.println("noul subsir din token:"+token);
         String pythonScript="""
         def polinom(text):
-            rez=sum(2*ord(ch)**3 -5*ord(ch)**2+3*ord(ch)+10 for ch in text) #2*ch^3+..
+            rez=sum(2*ord(ch)**3 -5*ord(ch)**2+3*ord(ch)+10 for ch in text)%100 #2*ch^3+..
             return rez
         polinom('""" +token+ """
         ')
@@ -49,6 +50,8 @@ class Polyglot {
             String element = array.getArrayElement(i).asString();
             String upper = PythonToUpper(element);
             int crc = SumCRC(upper);
+
+
             System.out.println(upper + " -> " + crc);
         }
         // inchidem contextul Polyglot
